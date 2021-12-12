@@ -1,3 +1,0 @@
-
-
-int factorielle(int n);
