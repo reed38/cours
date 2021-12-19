@@ -2,7 +2,7 @@
 #define BLOCNUM 1024
 #define NAMELEN 256
 
-extern struct objet *obj  ;
+extern struct objet *obj ;
 extern char volume[BLOCSIZE * BLOCNUM ];
 extern unsigned short FAT[BLOCNUM];
 extern unsigned short freeblocks;
