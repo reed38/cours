@@ -4,6 +4,8 @@
 #include<math.h>
 #include "bitmap.h"
 
+
+//azert
 //ex1
 int ex1(char *fichier_transporteur,char* fichier_source)
 
