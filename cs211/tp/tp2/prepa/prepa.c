@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-_Bool is_in_char(char* tab, int length, char element);
-void nombres_impairs();
-int lis_et_compte(char* nom_fichier);
+
 
 _Bool is_in_char(char* tab, int length, char element)
 {
@@ -20,45 +18,53 @@ _Bool is_in_char(char* tab, int length, char element)
   return is_in;
 }
 
-void nombres_impairs()
+int nombres_impaires()
 {
-  FILE* fl;
-  fl=fopen("nombres_impairs.txt","w");
-  if(fl==NULL)
-
-
-  for(int i=0;i<=100;i++)
+  char* outputo="nombres_impaires.txt";
+  FILE* output =fopen(outputo,"w");
+  if (output==NULL)
   {
-    if(i%2==1)
-      fprintf(fl,"%d",i);
+    printf("erreur lors de l'ouverture du fichier %s",outputo);
+    perror("");
+    return EXIT_FAILURE;
+  }
+  int count=0;
+  int i=0;
+  while(count<100)
+  {
+    if (i%2==1)
+    {
+      fprintf(output,"%d ",i);
+      count++;
+
+    }
+    i++;
 
   }
-  if(flcose(fl)==EOF)
+  if(fclose(output)==EOF)
   {
-    fprintf(stderr,"erreur lors de la fermeture fu fichier nombre_impaire.txt")
-    return(EXIT_FAILURE);
+    fprintf(stderr,"ereur lors de la fermeture du fichier %s",outputo);
+    perror("");
+    return EXIT_FAILURE;
   }
-
-
 }
 
 
-
-int lis_et_compte(char* nom_fichier)
+int lis_et_compte(char *fichier)
 {
-  char c;
   int nmbre_voyelles=0;
+  char c;
   char* liste_voyelle="aeiouy";
-  FILE* flux=fopen(nom_fichier,"r");
+  FILE* flux=fopen(fichier,"r");
   //gestion d'erreur
   if( NULL == flux ){
-    fprintf(stderr,"erreur ouverture %s\n",nom_fichier);
+    fprintf(stderr,"erreur ouverture %s\n",fichier);
     perror("");
     return EXIT_FAILURE ;
 
 }
 
-  while( EOF != ( c = getc(flux)) )
+  while( EOF != ( c= getc(flux)) )
   {
 
     if(is_in_char(liste_voyelle,6,c))
@@ -66,23 +72,20 @@ int lis_et_compte(char* nom_fichier)
   }
   if(fclose(flux)==EOF)
   {
-    printf("erreur lors de la fermeture du fichier %s", nom_fichier);
+    printf("erreur lors de la fermeture du fichier %s", fichier);
     return EXIT_FAILURE;
   }
 
 
   return(nmbre_voyelles);
 
-
-
-
 }
 int main(int argc, char *argv[])
 
 {
-  char *nom_fichier="fichier.txt";
-  int a=lis_et_compte(nom_fichier);
-  printf("\n nombre de voyelles:%d",a);
+
+  
+  printf("\n nombre de voyelles:%d",lis_et_compte(argv[1]));
   return 0;
 
 
