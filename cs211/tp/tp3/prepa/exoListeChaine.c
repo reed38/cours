@@ -4,66 +4,59 @@
 
 /* Ici, on est oblig� d'utiliser la notation struct xxx,
 car la structure s'auto-r�f�rence!*/
-typedef struct node Lnode;
- struct node {
+typedef struct node {
 		char data ;
 		struct node *link ;
-		} ;
+		} Lnode ;
 
 /* Insertion en "t�te de liste" */
 void insertionTete(Lnode **ph,char item){
-
-
-	Lnode *nouveau=malloc(sizeof(Lnode));
-	nouveau->data=item;
-	nouveau->link= *ph;
-	*ph=nouveau;
-}
-
-
+	Lnode *suivant=malloc(sizeof(Lnode));
+	suivant->data=item;
+	suivant->link=*ph;
+	*ph=suivant;
+	/* A compl�ter */
+	}
 
 /* Insertion en "queue de liste" */
 void insertionQueue(Lnode **ph,char item)	{
-	Lnode *ptr=*ph;
-	while(ptr->link!=NULL)
+	Lnode *suivant=*Lnode;
+
+	While(suivant->link!=NULL)
 	{
-		ptr=ptr->link;
+		suivant=suivant->link;
 	}
-	Lnode *nouveau=malloc(sizeof(Lnode));
-	nouveau->data=item;
-	ptr->link=nouveau;
-	nouveau->link=NULL;
-
-
+	Lnode *new=malloc(sizeof(Lnode));
+	new->data=item;
+	new->link=NULL;
+	suivant->link=new;
+	/* A compl�ter */
 	}
 
 /* Suppression en "t�te de liste" */
-void suppressionTete(Lnode **ph)
-{
-	Lnode *ptr=*ph;
-	*ph=ptr->link;
-	free(ptr);
+void suppressionTete(Lnode **ph){
+	Lnode *tmp=*ph;
+	*ph=tmp->link;
+	free(tmp);
 
 
 	}
 
 /* Suppression en "Queue" de liste" */
-void suppressionQueue(Lnode **ph)
-{
-	Lnode* ptr=*ph;
-	while((ptr->link)->link!=NULL)
+void suppressionQueue(Lnode **ph){
+	Lnode* suivant=*Lnode;
+	while(suivant->link->link!=NULL)
 	{
-		ptr=ptr->link;
+		suivant=suivant->link;
 	}
-
-	Lnode *tmp=ptr->link;
-	ptr->link=NULL;
+	Lnode *tmp=suivant->link;
+	suivant->link=NULL;
 	free(tmp);
-
+	/* A compl�ter */
 	}
 
 /* Proc�dure d'affichage de la liste. Ne doit pas �tre modifi�e!!! */
-void listeAffiche(Lnode  *ptr){
+void listeAffiche(Lnode * ptr){
 	if ( NULL == ptr )
 		printf("Liste vide!") ;
 	else
@@ -76,11 +69,10 @@ void listeAffiche(Lnode  *ptr){
 	}
 
 /* Programme principal. Ne doit pas �tre modifi�!!! */
-
 int main(void) {
 	Lnode *tete = NULL ;
 
-//	listeAffiche(tete) ;
+	listeAffiche(tete) ;
 	insertionTete(&tete,'a') ;
 	listeAffiche(tete) ;
 	insertionTete(&tete,'c') ;

@@ -1,12 +1,12 @@
-prog: main.o fat.o
-	gcc -Wall -g  -o $@ $^
+prog: fonctions.o main.o
+	gcc -Wall -g o $@ $^
 
-fat.o: fat.c
-	gcc -Wall  -c  $<
+fonctions.o: fonctions.c
+	gcc -c $<
 
 main.o: main.c
-	gcc -Wall  -c  $<
+	gcc -c $<
 
 
 clean:
-	rm *.o prog
+	rm -fr *.o prog 

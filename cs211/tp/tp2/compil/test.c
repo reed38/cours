@@ -5,8 +5,11 @@
 
 int main(void)
 {
-  char c='a';
-toupper((unsigned char)c);
+  char a=3;
+a>>=1;
+  a<<=1;
+  a|=1;
 
-  printf("\n%c",c);
+
+printf("%d",a);
 }

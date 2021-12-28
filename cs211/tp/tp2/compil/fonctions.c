@@ -85,19 +85,21 @@ int exo2(FILE* transporteur,FILE* source, int offset,size_t tailleimage)
 
   }
 }
-
-void masquage1(FILE* originel, FILE* source, FILE* transporteur,size_t taille)
+//probleme boucle infinie EOF jamais atteint
+void masquage1(char* originel, char* source, char* transporteur)
 {
-  unsigned char buffer;
+  FILE* fd_originel=open_file(originel,"r");
+  FILE* fd_source=open_file(source,"r");
+  FILE* fd_transporteur=open_file(transporteur,"w");
   unsigned char c_source;
   unsigned char c_originel;
-  while((c_source=fgetc(source))!=EOF)
+  while((fread(&c_source,sizeof(unsigned char),1,fd_source))==1)
   {
 
     for(int indice_octet=0;indice_octet<8;indice_octet++)
     {
 
-      c_originel=getc(originel);
+      c_originel=getc(fd_originel);
 
       unsigned char tmp=c_source;
       if((tmp &1 ) == 1)
@@ -109,9 +111,39 @@ void masquage1(FILE* originel, FILE* source, FILE* transporteur,size_t taille)
         c_originel=tolower(c_originel);
       }
       c_source>>=1;
-      putc(c_originel,transporteur);
+      putc(c_originel,fd_transporteur);
 
     }
+  }
+  close_file(fd_originel);
+  close_file(fd_source);
+  close_file(fd_transporteur);
+}
+
+
+int masquage2(FILE* fd_transporteur,FILE* fd_source,FILE* fd_originel,unsigned int offset)
+{
+  unsigned char octet_source=getc(fd_source);
+  unsigned char octet_originel;
+  fseek(fd_transporteur,offset,SEEK_SET);
+  fseek(fd_originel,offset,SEEK_SET);
+
+  //on code le contenu de surce dans transporteur
+  while(fread(&octet_source,sizeof(unsigned char),1,fd_source))
+  {
+    fread(&octet_source,sizeof(unsigned char),1,fd_source);
+    for (int i=0;i<8;i++)
+    {
+      fread(&octet_originel,sizeof(unsigned char),1,fd_originel);
+      unsigned char tmp=octet_source;
+      tmp&=1;
+      octet_originel>>=1;
+      octet_originel<<=1;
+      octet_originel|=tmp;
+      fwrite(&octet_originel,sizeof(unsigned char),1,fd_transporteur);
+      octet_source>>=1;
+    }
+
   }
 }
 
