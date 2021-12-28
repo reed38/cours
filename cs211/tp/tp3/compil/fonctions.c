@@ -10,6 +10,10 @@ void initialise_fat(){
   {
     FAT[i]=0xFFFF ;
   }
+  for(int j=0; j<BLOCSIZE*BLOCNUM; j++)
+  {
+    volume[j]=0;
+  }
   freeblocks=BLOCNUM;
   obj=NULL;
 }
@@ -29,13 +33,12 @@ int search_freeblock(int taille)
 
 struct objet *rechercher_objet(char *nom){
 
-  struct objet *ptr=obj-> next;
-  struct objet *result=NULL;
+  struct objet *ptr=obj;
   while(ptr->next!=NULL && !(strcmp(nom,ptr->nom)))
   {
     ptr=ptr->next;
   }
-  return result;
+  return ptr;
 }
 
 
@@ -88,7 +91,7 @@ struct objet *creer_objet(char *nom, unsigned short auteur,unsigned int taille, 
 
 
     }
-
+    //on copie les données restantes taille<BLOCNUM
     if(taille>0)
     {
       FAT[currentblock]=search_freeblock(taille);
