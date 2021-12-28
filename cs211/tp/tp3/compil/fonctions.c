@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdib.h>
+#include <stdlib.h>
 #include <string.h>
 #include "fat.h"
 
@@ -49,20 +49,21 @@ struct objet *creer_objet(char *nom, unsigned short auteur,unsigned int taille, 
   if(rechercher_objet(nom)!=NULL)
   {
     fprintf(stderr,"error the name %s already exists\n",nom);
-    return EXIT_FAILURE;
+    return NULL;
   }
   if(taille/BLOCSIZE>freeblocks)
   {
     fprintf(stderr,"not enought space remaining\n");
+    return NULL;
   }
   else{
 
 
     freeblocks-=taille/BLOCSIZE;
-    unsigned int currentblock=search_freeblock();
+    unsigned int currentblock=search_freeblock(taille);
 
     struct objet *suivant=malloc(sizeof(struct objet));
-    strcpy(next->nom,nom);
+    strcpy(suivant->nom,nom);
     suivant->taille=taille;
     suivant->auteur=auteur;
     suivant->index=currentblock;
@@ -88,28 +89,30 @@ struct objet *creer_objet(char *nom, unsigned short auteur,unsigned int taille, 
 
     }
 
-    if(size>0)
+    if(taille>0)
     {
       FAT[currentblock]=search_freeblock(taille);
       memcpy(&volume[BLOCSIZE*currentblock],&data[BLOCSIZE*currentblock],taille);
     }
     //on affecte la valeur de la dernière case du tableau
-    FAT[FAT[currentblock]]=OxFFFE;
+    FAT[FAT[currentblock]]=0xFFFE;
+    return (suivant);
 }
-return 0;
+
+
 }
 
 
 
 int supprimer_objet(char *nom){
 
-  struct objet *ptr=*obj;
+  struct objet *ptr=obj;
 //on supprime la structure assosciée à l'objet
   while(!strcmp(nom,ptr->next->nom))
   {
     ptr=ptr->next;
   }
-  struct obj *tmp=ptr->next;
+  struct objet *tmp=ptr->next;
   ptr->next=ptr->next->next;
   unsigned int currentblock=tmp->index;
   unsigned int nextblock;
@@ -121,22 +124,26 @@ int supprimer_objet(char *nom){
     nextblock=FAT[currentblock];
     FAT[currentblock]=0xFFFF;
     currentblock=nextblock;
-
+    freeblocks++;
   }
+  FAT[i]=0xFFFF;
+  freeblocks++;
+
+  return 1;
 
 
 }
 
 void supprimer_tout(){
   //on efface les données de la struct
-  while(*obj!=NULL)
+  while(obj!=NULL)
   {
-    struct objet *tmp=obj->next;
+    struct objet *tmp=obj;
     obj->next=tmp->next;
     free(tmp);
   }
   //on effece les données de structure
   initialise_fat();
-  return 1;
+
 
 }

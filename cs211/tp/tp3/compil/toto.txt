@@ -1,0 +1,5 @@
+salut, j'ai reregardé la cs211
+
+
+J'ai mis quasiment la même chose pour tout exepté la fonction creer_objet
+il y a moyen d'utiliser la fonctions memcpy pour copier les données de data à volume, et de faire quelque chose de plus simple
